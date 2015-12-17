@@ -10,7 +10,7 @@ import org.slf4j.ext.mdc.tree.*;
 public class Event extends RootNode<Event> {
   private Who who = new Who("who", this);
   private What what = new What("what", this);
-  private StringNode trackingId = new StringNode("trackingId", this, "0");
+  private StringProperty trackingId = new StringProperty("trackingId", this, "0");
 
   public Who getWho() {
     return who;
@@ -28,7 +28,7 @@ public class Event extends RootNode<Event> {
     this.what = what.copy(this);
   }
 
-  public StringNode getTrackingId(){
+  public StringProperty getTrackingId(){
     return trackingId;
   }
 
@@ -37,7 +37,7 @@ public class Event extends RootNode<Event> {
   }
 
   public class Who extends NonLeafNode<Who> {
-    private StringNode id = new StringNode("id", this, "");
+    private StringProperty id = new StringProperty("id", this, "");
 
     private Who(String name, Node parent) {
       super(name, Who.class, parent);
@@ -83,11 +83,11 @@ public class Event extends RootNode<Event> {
     }
 
     public class Outcome extends NonLeafNode<Outcome> {
-      private StringNode resultString = new StringNode("result_string", this, "");
-      private IntegerNode resultNumber = new IntegerNode("result_number", this, 0);
-      private BooleanNode resultBoolean = new BooleanNode("result_boolean", this, false);
-      private StringNode error = new StringNode("error", this, "");
-      private IntegerNode statusCode = new IntegerNode("statusCode", this, 0);
+      private StringProperty resultString = new StringProperty("result_string", this, "");
+      private IntegerProperty resultNumber = new IntegerProperty("result_number", this, 0);
+      private BooleanProperty resultBoolean = new BooleanProperty("result_boolean", this, false);
+      private StringProperty error = new StringProperty("error", this, "");
+      private IntegerProperty statusCode = new IntegerProperty("statusCode", this, 0);
 
       private Outcome(String name, Node parent) {
         super(name, Outcome.class, parent);
@@ -128,7 +128,7 @@ public class Event extends RootNode<Event> {
         this.resultBoolean.set(resultBoolean);
       }
 
-      public StringNode getError() {
+      public StringProperty getError() {
         return error;
       }
 
@@ -136,7 +136,7 @@ public class Event extends RootNode<Event> {
         this.error.set(error);
       }
 
-      public IntegerNode getStatusCode() {
+      public IntegerProperty getStatusCode() {
         return statusCode;
       }
 

@@ -17,7 +17,6 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
-import org.slf4j.ext.mdc.tree.StringNode;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;

@@ -30,7 +30,7 @@ public class StructuredMDC extends RootNode<StructuredMDC> {
   public final What what = new What("what", this);
 
   @Property(name="trackingId")
-  private String trackingId;
+  public final StringProperty trackingId = new StringProperty("trackingId", this, "0");
 
   @Pojo(name = "who")
   public static class Who extends NonLeafNode<Who> {
@@ -40,7 +40,7 @@ public class StructuredMDC extends RootNode<StructuredMDC> {
     }
 
     @Property(name="id")
-    public final StringNode id = new StringNode("id", this, "");
+    public final StringProperty id = new StringProperty("id", this, "");
   }
 
   @Pojo(name = "what")
@@ -61,13 +61,13 @@ public class StructuredMDC extends RootNode<StructuredMDC> {
       }
 
       @Property(name="result_string")
-      public final StringNode resultString = new StringNode("result_string", this, "");
+      public final StringProperty resultString = new StringProperty("result_string", this, "");
 
       @Property(name="result_number")
-      public final NumberNode resultNumber = new NumberNode("result_number", this, 0);
+      public final NumberProperty resultNumber = new NumberProperty("result_number", this, 0);
 
       @Property(name="result_boolean")
-      public final BooleanNode resultBoolean = new BooleanNode("result_boolean", this, false);
+      public final BooleanProperty resultBoolean = new BooleanProperty("result_boolean", this, false);
 
 //      @Property(name="result_object")
 //      private Object resultObject;
@@ -79,10 +79,10 @@ public class StructuredMDC extends RootNode<StructuredMDC> {
 //      private Map resultMap;
 
       @Property(name="error")
-      public final StringNode error = new StringNode("error", this, "");
+      public final StringProperty error = new StringProperty("error", this, "");
 
       @Property(name="statusCode")
-      public final IntegerNode statusCode = new IntegerNode("statusCode", this, 0);
+      public final IntegerProperty statusCode = new IntegerProperty("statusCode", this, 0);
     }
   }
 

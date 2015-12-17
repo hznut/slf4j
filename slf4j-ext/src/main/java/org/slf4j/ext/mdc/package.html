@@ -7,7 +7,15 @@
 
 
   <body>    
-    <p>POJO tree for storing event information local to current thread's context i.e. thread local.
-      Many production systems these days capture and log events as Json Eg. Click/impression events on websites/Ads.</p>
+      <h1>Structured MDC (SMDC)</h1>
+      <p>This implementation uses the same inherited thread local concept that MDC implementations use internally.
+        In org.slf4j.MDC both key and value can only be of String type. This implementation allows you to store different
+        data types (normally the ones you'll see in Json) in <i>structure</i> of your choice not just a flat key-value map.
+
+
+        POJO tree for storing event information local to current thread's context i.e. thread local.
+        Many production systems these days capture and log events as Json Eg. Click/impression events on websites/Ads.
+
+    </p>
   </body> 
 </html>

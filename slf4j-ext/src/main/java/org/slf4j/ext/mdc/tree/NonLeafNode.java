@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,16 +34,16 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
 //    private T value;
   private final Class<T> clazz;
   //TODO: provide additional properties
+  public final Map<String, String> additionalProperties = new HashMap<String, String>();
 
-  protected NonLeafNode(String name, Class<T> clazz, Node parent) {
-    super(name, clazz, parent);
+  NonLeafNode(String name, Class<T> clazz, Node parent, String separatorForFqn) {
+    super(name, clazz, parent, separatorForFqn);
     this.clazz = clazz;
   }
 
-//    public T get(){
-//        return value;
-//    }
-//
+  protected NonLeafNode(String name, Class<T> clazz, Node parent) {
+    this(name, clazz, parent, (parent == null) ? DEFAULT_SEPARATOR_FOR_FQN : parent.SEPARATOR_FOR_FQN);
+  }
 
   /**
    * Recursively calls set(...) on the @Property annotated fields.
@@ -71,6 +72,8 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
           }
         }
       }
+      additionalProperties.clear();
+      additionalProperties.putAll(other.additionalProperties);
     }
   }
 
@@ -240,6 +243,7 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
         }
       }
     }
+    additionalProperties.clear();
   }
 
   @Override
@@ -253,6 +257,8 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
           field.getClass().getMethod("set").invoke(copy, field.get(this));//i.e. copy.foo.set(this.foo)
         }
       }
+      copy.additionalProperties.clear();
+      copy.additionalProperties.putAll(additionalProperties);
       return copy;
     } catch (NoSuchMethodException e) {
       return (T)this;//Should never happen unless a special SecurityManager is in use

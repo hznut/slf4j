@@ -25,6 +25,7 @@ public abstract class RootNode<R extends RootNode> extends NonLeafNode<R> {
   public final String EVENT_MARKER_STRING;
   private final Marker MARKER;
   private static final Logger LOGGER = LoggerFactory.getLogger(RootNode.class);
+
   private static final InheritableThreadLocal<RootNode> holder = new InheritableThreadLocal<RootNode>() {
     @Override
     protected RootNode initialValue() {
@@ -43,20 +44,38 @@ public abstract class RootNode<R extends RootNode> extends NonLeafNode<R> {
   /**
    * @param marker Could be something like 'EVENT' or 'AUDIT' etc.
    */
-  protected RootNode(String marker, Class<R> type, String name) {
-    super(name, type, null);
+  protected RootNode(String marker, Class<R> type, String name, String separatorForFqn) {
+    super(name, type, null, separatorForFqn);
     clazz = type;
-    EVENT_MARKER_STRING = marker;
-    MARKER = MarkerFactory.getDetachedMarker(EVENT_MARKER_STRING);
+    if(marker != null && !marker.isEmpty()) {
+      EVENT_MARKER_STRING = marker;
+      MARKER = MarkerFactory.getDetachedMarker(EVENT_MARKER_STRING);
+    } else {
+      EVENT_MARKER_STRING = null;
+      MARKER = null;
+    }
+  }
+
+  protected RootNode(Class<R> type, String name, String separatorForFqn) {
+    this(null, type, name, separatorForFqn);
+  }
+
+  protected RootNode(Class<R> type, String name) {
+    this(null, type, name, DEFAULT_SEPARATOR_FOR_FQN);
+  }
+
+  protected RootNode(String marker, Class<R> type, String name) {
+    this(marker, type, name, DEFAULT_SEPARATOR_FOR_FQN);
   }
 
   /**
-   * Calls copy(). Ignores the param 'parent'.
+   * Calls copy(). Ignores the param 'parent' since there's no parent for root node.
+   *
    * @param parent Ignored
    * @return
    */
   @Override
-  public R copy(Node parent){
+  public final R copy(Node parent) {
     return copy();
   }
 
@@ -69,11 +88,19 @@ public abstract class RootNode<R extends RootNode> extends NonLeafNode<R> {
    * The marker string 'EVENT' is used by log4j2.xml / logback.xml / log4j.properties to distinguish between these records and the regular application logs.
    */
   public void logJson() {
-    LOGGER.error(MARKER, toJson());
+    if(MARKER != null){
+      LOGGER.error(MARKER, toJson());
+    } else {
+      LOGGER.error(toJson());
+    }
   }
 
   public void logXml() {
-    LOGGER.error(MARKER, toXml());
+    if(MARKER != null){
+      LOGGER.error(MARKER, toXml());
+    } else {
+      LOGGER.error(toXml());
+    }
   }
 
   /**

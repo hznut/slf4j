@@ -2,7 +2,6 @@ package org.slf4j.ext.mdc;
 
 import org.junit.Test;
 import org.slf4j.ext.mdc.tree.Node;
-import org.slf4j.ext.mdc.example2.Event;
 
 import static org.junit.Assert.assertEquals;
 
