@@ -10,17 +10,38 @@ import org.slf4j.ext.mdc.tree.*;
  */
 @RootPojo(name = "event")
 public class StructuredMDC extends RootNode<StructuredMDC> {
+//  static{
+//    staticInit(StructuredMDC.class);
+//  }
 
   private StructuredMDC(){
-    super("EVENT", StructuredMDC.class, "event");
+    super("EVENT", StructuredMDC.class, "event");//TODO: how to check body of constructor during compilation/annotation processing ??
   }
+
+//  protected static RootNode newInstance() {
+    //return new StructuredMDC();
+//    return this("EVENT", StructuredMDC.class, "event");
+//  }
+
+//  private static final InheritableThreadLocal<StructuredMDC> holder = new InheritableThreadLocal<StructuredMDC>() {
+//    @Override
+//    protected StructuredMDC initialValue() {
+//      return new StructuredMDC();
+//    }
+//
+//    @Override
+//    protected StructuredMDC childValue(StructuredMDC parentThreadValue) {
+//      if(parentThreadValue != null) {
+//        return (StructuredMDC) parentThreadValue.copy();
+//      }
+//      return new StructuredMDC();
+//    }
+//  };
+
+  private static final GenericRootNodeHolder<StructuredMDC> holder = new GenericRootNodeHolder<StructuredMDC>(StructuredMDC.class);
 
   public static StructuredMDC get() {
-    return (StructuredMDC) RootNode.get();
-  }
-
-  protected static RootNode newInstance() {
-    return new StructuredMDC();
+    return holder.get();//TODO: how to check for this body of method during compilation/annotation processing ??
   }
 
   @Property(name="who")

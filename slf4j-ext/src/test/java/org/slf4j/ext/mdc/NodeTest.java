@@ -41,4 +41,19 @@ public class NodeTest {
         TestNode n3 = new TestNode("grandChild1", n2);
         assertEquals("root.child1.grandChild1", n3.fqn());
     }
+
+    @Test
+    public void testSetToDefault(){
+
+    }
+
+    @Test
+    public void testCopy(){
+
+    }
+
+    @Test
+    public void testClone(){
+
+    }
 }

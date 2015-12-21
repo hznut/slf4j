@@ -1,10 +1,12 @@
 package org.slf4j.ext.mdc.tree;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Root of the POJO tree which is used to capture event information. The tree must be clonable. This is required for it's internal workings.
@@ -16,7 +18,7 @@ import org.slf4j.MarkerFactory;
  * Recommendations on usage:
  * 1. Do not use this API for storing sessions, metrics etc. Use it only for the intended purpose - capture event information
  * and log it.
- * 2.
+ * 2. No guarantees on behavior of grandchild(ren) of this class. It has been tested only for direct subclasses.
  *
  * @author Himanshu Vijay
  */
@@ -26,20 +28,18 @@ public abstract class RootNode<R extends RootNode> extends NonLeafNode<R> {
   private final Marker MARKER;
   private static final Logger LOGGER = LoggerFactory.getLogger(RootNode.class);
 
-  private static final InheritableThreadLocal<RootNode> holder = new InheritableThreadLocal<RootNode>() {
-    @Override
-    protected RootNode initialValue() {
-      return RootNode.newInstance();
-    }
-
-    @Override
-    protected RootNode childValue(RootNode parentValue) {
-      if(parentValue != null) {
-        return (RootNode) parentValue.copy();
-      }
-      return RootNode.newInstance();
-    }
-  };
+  /*So that multiple types of RootNode implementations can co-exist in same JVM*/
+//  private static final Map<Class, GenericRootNodeHolder> holderLookup = new HashMap<Class, GenericRootNodeHolder>();
+//
+//  protected static <T extends RootNode> void staticInit(Class<T> rootNodeRuntimeClass){
+//    holderLookup.put(rootNodeRuntimeClass, new GenericRootNodeHolder<T>(rootNodeRuntimeClass));
+//  }
+//
+//  public static <T extends RootNode> T get(){
+//
+//    Class<T> c = (Class<T>) new Object(){}.getClass().getEnclosingClass();//TODO Figure out how to get runtime class
+//    return (T) holderLookup.get(c).get();
+//  }
 
   /**
    * @param marker Could be something like 'EVENT' or 'AUDIT' etc.
@@ -110,29 +110,11 @@ public abstract class RootNode<R extends RootNode> extends NonLeafNode<R> {
     LOGGER.error(MARKER, toCSKV("=", ","));
   }
 
-  public static RootNode get() {
-    return (RootNode) holder.get();
-  }
+//  public static RootNode get() {
+//    return (RootNode) holder.get();
+//  }
 
-  public static void reset() {
-    holder.get().setToDefault();
-  }
-
-  /**
-   * Replaces only if other != null.
-   *
-   * @throws CloneNotSupportedException If clone() has not been implemented by child class.
-   */
-  public static void replace(RootNode other) throws CloneNotSupportedException {
-    if(other != null) {
-      holder.set((RootNode) other.copy());
-    }
-  }
-
-  /**
-   * <b>Must override this method.</b>
-   */
-  protected static RootNode newInstance() {
-    throw new NotImplementedException();
+  public void reset() {
+    setToDefault();
   }
 }

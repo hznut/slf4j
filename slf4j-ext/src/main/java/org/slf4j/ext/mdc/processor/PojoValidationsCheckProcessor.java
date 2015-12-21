@@ -2,8 +2,6 @@ package org.slf4j.ext.mdc.processor;
 
 
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.*;
-import org.slf4j.ext.mdc.annotation.GeneratedFile;
 import org.slf4j.ext.mdc.annotation.Pojo;
 import org.slf4j.ext.mdc.annotation.Property;
 import org.slf4j.ext.mdc.annotation.RootPojo;
@@ -18,8 +16,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;

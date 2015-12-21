@@ -5,14 +5,12 @@ import org.slf4j.ext.mdc.annotation.Pojo;
 import org.slf4j.ext.mdc.annotation.Property;
 import org.slf4j.ext.mdc.annotation.RootPojo;
 import org.slf4j.ext.mdc.tree.Node;
-import org.slf4j.ext.mdc.tree.NonLeafNode;
 import org.slf4j.ext.mdc.tree.RootNode;
 
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.ClassName;
@@ -22,16 +20,11 @@ import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
 
 @AutoService(Processor.class)

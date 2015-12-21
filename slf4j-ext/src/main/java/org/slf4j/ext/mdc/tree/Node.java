@@ -28,9 +28,9 @@ public abstract class Node<T extends Node> implements Cloneable {
     this(name, clazz, parent, (parent == null) ? DEFAULT_SEPARATOR_FOR_FQN : parent.SEPARATOR_FOR_FQN);
   }
 
-  protected void setParent(Node parent) {
-    this.parent = parent;
-  }
+//  protected void setParent(Node parent) {
+//    this.parent = parent;
+//  }
 
   public abstract void setToDefault();
 
@@ -38,6 +38,14 @@ public abstract class Node<T extends Node> implements Cloneable {
     return copy(null);
   }
 
+  /**
+   * <b>Why copy(..) method when we can override clone() ?</b>
+   * clone() method's return type is Object whereas stricter type safety is desired overall for the inner workings of this API.
+   * Hence the copy() method(s). clone() simply calls copy().
+   *
+   * @param parent
+   * @return
+   */
   protected abstract T copy(Node parent);
 
   @Override

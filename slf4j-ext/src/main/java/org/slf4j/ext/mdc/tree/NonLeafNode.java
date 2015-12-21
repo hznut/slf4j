@@ -33,7 +33,6 @@ import java.util.Map;
 public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
 //    private T value;
   private final Class<T> clazz;
-  //TODO: provide additional properties
   public final Map<String, String> additionalProperties = new HashMap<String, String>();
 
   NonLeafNode(String name, Class<T> clazz, Node parent, String separatorForFqn) {
@@ -74,6 +73,15 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
       }
       additionalProperties.clear();
       additionalProperties.putAll(other.additionalProperties);
+    }
+  }
+
+  /**
+   * Same as set(other)
+   */
+  public void replace(T other) {
+    if(other != null) {
+      set(other);
     }
   }
 
@@ -228,6 +236,20 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
     return sb.toString();
   }
 
+  /**
+   * <b>Optimization guideline for child classes:</b>
+   * <p>If the non leaf node has @Property foo, bar, baz then you can override this method and do following:</p>
+   * <pre>
+   *   {@literal@}Override
+   *   public void setToDefault(){
+   *     foo.setToDefault();
+   *     bar.setToDefault();
+   *     baz.setToDefault();
+   *     additionalProperties.clear();
+   *   }
+   * </pre>
+   * The default implementation does the same using reflection so that API users don't have to repeat this boilerplate code.
+   */
   @Override
   public void setToDefault(){
     for(Field field  : clazz.getDeclaredFields()){
@@ -246,6 +268,23 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
     additionalProperties.clear();
   }
 
+  /**
+   * <b>Optimization guideline for child classes:</b>
+   * <p>If the non leaf node MyPojo has @Property foo, bar, baz then you can override this method and do following:</p>
+   * <pre>
+   *   {@literal@}Override
+   *   public void MyPojo copy(Node parent){
+   *     MyPojo copy = new MyPojo(this.NAME, parent);
+   *     copy.foo.set(this.foo);
+   *     copy.bar.set(this.bar);
+   *     copy.baz.set(this.baz);
+   *     copy.additionalProperties.clear();
+   *     copy.additionalProperties.putAll(additionalProperties);
+   *     return copy;
+   *   }
+   * </pre>
+   * The default implementation does the same using reflection so that API users don't have to repeat this boilerplate code.
+   */
   @Override
   public T copy(Node parent) {
     try {
@@ -254,7 +293,7 @@ public abstract class NonLeafNode<T extends NonLeafNode> extends Node<T> {
       T copy = constructor.newInstance(this.NAME, parent);
       for(Field field : clazz.getDeclaredFields()) {
         if(field.isAnnotationPresent(Property.class)) {
-          field.getClass().getMethod("set").invoke(copy, field.get(this));//i.e. copy.foo.set(this.foo)
+          field.getClass().getMethod("set").invoke(field.get(copy), field.get(this));//i.e. copy.foo.set(this.foo)
         }
       }
       copy.additionalProperties.clear();
